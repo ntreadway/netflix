@@ -1,10 +1,10 @@
 History.txt
 Manifest.txt
-README.txt
+README
 Rakefile
-bin/netflix1
-lib/netflix1.rb
-spec/netflix1_spec.rb
+bin/netflix
+lib/netflix.rb
+spec/netflix_spec.rb
 spec/spec_helper.rb
 tasks/ann.rake
 tasks/bones.rake
@@ -19,4 +19,4 @@ tasks/setup.rb
 tasks/spec.rake
 tasks/svn.rake
 tasks/test.rake
-test/test_netflix1.rb
+test/test_netflix.rb

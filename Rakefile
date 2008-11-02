@@ -2,19 +2,19 @@
 # configured in this Rakefile. The .rake files in the tasks directory
 # are where the options are used.
 
-load 'tasks/setup.rb'
+load "tasks/setup.rb"
 
-ensure_in_path 'lib'
-require 'netflix1'
+ensure_in_path "lib"
+require "netflix"
 
-task :default => 'spec:run'
+task :default => "spec:run"
 
-PROJ.name = 'netflix1'
-PROJ.authors = 'FIXME (who is writing this software)'
-PROJ.email = 'FIXME (your e-mail)'
-PROJ.url = 'FIXME (project homepage)'
-PROJ.rubyforge.name = 'netflix1'
+PROJ.name = "netflix"
+PROJ.authors = "Rob Ares"
+PROJ.email = "rob.ares@gmail.com"
+PROJ.url = "http://www.robares.com"
+PROJ.rubyforge.name = "netflix"
 
-PROJ.spec.opts << '--color'
+PROJ.spec.opts << "--color"
 
 # EOF
