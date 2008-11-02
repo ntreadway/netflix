@@ -1,0 +1,38 @@
+require 'rubygems'
+require 'rake/gempackagetask'
+require 'rake/testtask'
+
+require 'lib/netflix/version'
+
+task :default => :test
+
+spec = Gem::Specification.new do |s|
+  s.name             = "netflix"
+  s.version          = Netflix::Version.to_s
+  s.has_rdoc         = true
+  s.extra_rdoc_files = %w(README.markdown)
+  s.summary          = "This gem does ... "
+  s.author           = "Rob Ares"
+  s.email            = "rob.ares@gmail.com"
+  s.homepage         = "http://www.robares.com"
+  s.files            = %w(README.markdown Rakefile) + Dir.glob("{lib,test}/**/*")
+  s.add_dependency("rares-oauth", ">=0.2.7")
+end
+
+Rake::GemPackageTask.new(spec) do |pkg|
+  pkg.gem_spec = spec
+end
+
+Rake::TestTask.new do |t|
+  t.libs << 'test'
+  t.test_files = FileList["test/**/*_test.rb"]
+  t.verbose = true
+  t.options = "-v"
+end
+
+desc 'Generate the gemspec to serve this Gem from Github'
+task :github do
+  file = File.dirname(__FILE__) + "/#{spec.name}.gemspec"
+  File.open(file, 'w') {|f| f << spec.to_ruby }
+  puts "Created gemspec: #{file}"
+end
