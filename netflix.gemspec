@@ -1,0 +1,29 @@
+Gem::Specification.new do |s|
+  s.name = %q{netflix}
+  s.version = "0.1.0"
+
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.authors = ["Rob Ares"]
+  s.date = %q{2008-11-02}
+  s.email = %q{rob.ares@gmail.com}
+  s.extra_rdoc_files = ["README.markdown"]
+  s.files = ["README.markdown", "Rakefile", "lib/netflix", "lib/netflix/version.rb", "lib/netflix.rb", "test/netflix_test.rb"]
+  s.has_rdoc = true
+  s.homepage = %q{http://www.robares.com}
+  s.require_paths = ["lib"]
+  s.rubygems_version = %q{1.2.0}
+  s.summary = %q{This gem does ...}
+
+  if s.respond_to? :specification_version then
+    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
+    s.specification_version = 2
+
+    if current_version >= 3 then
+      s.add_runtime_dependency(%q<rares-oauth>, [">= 0.2.7"])
+    else
+      s.add_dependency(%q<rares-oauth>, [">= 0.2.7"])
+    end
+  else
+    s.add_dependency(%q<rares-oauth>, [">= 0.2.7"])
+  end
+end
