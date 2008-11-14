@@ -13,15 +13,18 @@ module Netflix
     
   # Client class responsible for setting up api calls.
   class Client
-    attr_accessor :consumer_key, :consumer_secret, :application_name
+    attr_accessor :consumer_key, :consumer_secret, :application_name, :api_version
     
     def initialize(consumer_key, consumer_secret, application_name)
       raise ArgumentError if consumer_key.nil? or consumer_secret.nil? or application_name.nil?
       @consumer_key = consumer_key
       @consumer_secret = consumer_secret
       @application_name = application_name
-    end
-    
+      @api_version = "1.0"
+      
+      @access_token = nil
+      @access_token_secret = nil
+    end    
     
     # client.generate_request_token("http://cnn.com/") do |t, s, auth_url|
     #   # save to db here.
@@ -29,7 +32,7 @@ module Netflix
     # end
     def generate_request_token(callback_url, &blk)
       raise ArgumentError.new("a block is required as the last arguement") unless block_given?
-      # asser that we can do this here...
+      # assert that we can do this here...
       
       # populate oauth token
       # return token, secret
@@ -67,7 +70,9 @@ module Netflix
       yield
     end
     
-    def go(method, path, arguments)
+    def go(method, path, expansions = [], arguments = {})
+      raise NetflixClientError.new("An access token is required to make api calls") if @access_token.nil? or @access_token_secret.nil?
+      
       # fail if no access creds.
       # populate access token with instance vars.
       # delegate to the client class

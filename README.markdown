@@ -14,7 +14,7 @@ This gem handles some of the complexity in dealing with the netflix api (and OAu
 
 ## License
 
-Copyright (c) 2008 <copyright holders>
+Copyright (c) 2008 Rob Ares
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
