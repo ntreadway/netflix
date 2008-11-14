@@ -2,7 +2,7 @@
 
 ## Description
 
-Describe your gem here ... 
+This gem handles some of the complexity in dealing with the netflix api (and OAuth in turn). 
 
 ## Installation
 
@@ -10,11 +10,11 @@ Describe your gem here ...
 
 ## Usage
 
-    require 'netflix'
+    require "netflix"
 
 ## License
 
-Copyright (c) <year> <copyright holders>
+Copyright (c) 2008 <copyright holders>
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
