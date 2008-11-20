@@ -38,7 +38,7 @@ module Netflix
       # return token, secret
       # do stuff
       
-      # give this to the client so that they can save it and shit
+      # give this to the client so that they can save it and stuff
       yield request_token, request_token_secret, build_authorize_url(callback_url)
     end
    
