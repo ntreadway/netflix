@@ -36,13 +36,13 @@ describe Netflix::Client, "When initially created" do
     client.api_version.should == "1.0"  
   end
   
-  it "should respond to a #generate_request_token instance method and yield 3 variables" do
+  it "should respond to a #acquire_request_token instance method and yield 3 variables" do
     client = Netflix::Client.new("", "", "")
     client.should respond_to(:acquire_request_token)
   end
-  it "should respond to a #generate_access_token instance method and yield 3 variables" do
+  it "should respond to a #exchange_request_token_for_access_token instance method and yield 3 variables" do
     client = Netflix::Client.new("", "", "")
-    client.should respond_to(:acquire_access_token_from_request_token)  
+    client.should respond_to(:exchange_request_token_for_access_token)  
   end
   
   it "should respond to a #from_access_token and yield nothing" do

@@ -44,12 +44,12 @@ module Netflix
    
     # assuming we have stored these somewhere
     # this just gets us the tokens, we need to have an object that will allow us to make calls.
-    # client.acquire_access_token_from_request_token(rt, rs) do |t, s, uid|
+    # client.exchange_request_token_for_access_token(rt, rs) do |t, s, uid|
     #   # save to db here.
     #   
     #   # do class_eval so that we can just call go(:get, "/queue")
     # end
-    def acquire_access_token_from_request_token(request_token, request_token_secret, &blk)
+    def exchange_request_token_for_access_token(request_token, request_token_secret, &blk)
       raise ArgumentError.new("a block is required as the last argument") unless block_given?
       
       yield access_token, access_token_secret, user_id
