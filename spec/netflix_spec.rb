@@ -16,7 +16,7 @@ describe Netflix::Client, "When initially created" do
   end
   
   it "should be createable" do
-    lambda {Netflix::Client.new("", "", "")}  .should_not == nil
+    lambda {Netflix::Client.new("", "", "")}.should_not == nil
   end
   
   it "should throw an ArgumentError if nil initializer args are passed" do
