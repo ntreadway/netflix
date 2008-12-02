@@ -12,7 +12,7 @@ module Netflix
   class NetflixClientError < StandardError; end  
     
   # Client class responsible for setting up api calls.
-  class Client
+  class AssHat
     attr_accessor :consumer_key, :consumer_secret, :application_name, :api_version
     
     def initialize(consumer_key, consumer_secret, application_name)
@@ -31,7 +31,6 @@ module Netflix
     #   redirect_to auth_url
     # end
     def acquire_request_token(callback_url, &blk)
-      raise ArgumentError.new("a block is required as the last argument") unless block_given?
       # assert that we can do this here...
       
       # populate oauth token
@@ -49,9 +48,7 @@ module Netflix
     #   
     #   # do class_eval so that we can just call go(:get, "/queue")
     # end
-    def exchange_request_token_for_access_token(request_token, request_token_secret, &blk)
-      raise ArgumentError.new("a block is required as the last argument") unless block_given?
-      
+    def exchange_request_token_for_access_token(request_token, request_token_secret, &blk)      
       yield access_token, access_token_secret, user_id
       # use the request token here to get an access token
       # return access token and user id to save.
@@ -63,11 +60,10 @@ module Netflix
     # do class_eval so that we can just call go(:get, "/queue")
     # end
     def from_access_token(access_token, access_token_secret, &blk)
-      raise ArgumentError.new("a block is required as the last argument") unless block_given?      
       #pass infos to the client
       # set instance vars that the oauth client uses.
       # evaluate this block
-      yield AccessTokenWrapper.new(access_token, access_token_secret)
+      yield AccessTokenWrapper.new(access_token, access_token_secret, user_id)
     end
     
     def build_authorize_url(callback_url)
@@ -76,24 +72,51 @@ module Netflix
        
   end
   
-  class AccessTokenWrapper
-    attr_accessor :access_token, :access_token_secret
+  class Client
     
-    def initialize(access_token, access_token_secret)
-      @access_token = access_token
-      @access_token_secret = access_token_secret
+    def self.consumer_token=(consumer_token)
+      @consumer_token = consumer_token
     end
     
-    def go(method, path, expansions = [], arguments = {})
-      raise Netflix::NetflixClientError.new("An access token is required to make api calls") if @access_token.nil? or @access_token_secret.nil?
-
-      # fail if no access creds.
-      # populate access token with instance vars.
-      # delegate to the client class
-      # need to append "Accept-Encoding" => "compress" as header and figure out a way to append the etag stuff.
-      # supposedly /users/current will work but i have yet to see this working.
-
+    def self.consumer_token
+      @consumer_token
     end
+    
+    def self.consumer_secret=(consumer_secret)
+      @consumer_secret = consumer_secret
+    end
+    
+    def self.consumer_secret
+      @consumer_secret
+    end
+    
+
+
+      
+    # attr_accessor :access_token, :access_token_secret, :user_id
+    # 
+    # def initialize(access_token, access_token_secret, user_id)
+    #   @access_token = access_token
+    #   @access_token_secret = access_token_secret
+    #   @user_id = user_id
+    # end
+    # 
+    # def user
+    #   
+    # end
+    # 
+    # def get(path, arguments = {})
+    #   raise Netflix::NetflixClientError.new("An access token is required to make api calls") if @access_token.nil? or @access_token_secret.nil?
+    # 
+    #     
+    # 
+    #   # fail if no access creds.
+    #   # populate access token with instance vars.
+    #   # delegate to the client class
+    #   # need to append "Accept-Encoding" => "compress" as header and figure out a way to append the etag stuff.
+    #   # supposedly /users/current will work but i have yet to see this working.
+    #   
+    # end
   
   end
 
