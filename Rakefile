@@ -25,6 +25,8 @@ end
 
 Spec::Rake::SpecTask.new(:spec) do |s|
   s.spec_files = FileList[File.dirname(__FILE__) + '/spec/*_spec.rb']
+  s.verbose = true
+  s.spec_opts = ["--color", "--format specdoc", "--diff"]
 end
 
 desc 'Generate the gemspec to serve this Gem from Github'

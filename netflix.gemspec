@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.date = %q{2008-11-14}
   s.email = %q{rob.ares@gmail.com}
   s.extra_rdoc_files = ["README.markdown"]
-  s.files = ["README.markdown", "Rakefile", "lib/netflix", "lib/netflix/client.rb", "lib/netflix/version.rb", "lib/netflix.rb"]
+  s.files = ["README.markdown", "Rakefile", "lib/netflix", "lib/netflix/client.rb", "lib/netflix/user.rb", "lib/netflix/version.rb", "lib/netflix.rb"]
   s.has_rdoc = true
   s.homepage = %q{http://www.robares.com}
   s.require_paths = ["lib"]

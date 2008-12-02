@@ -31,7 +31,6 @@ module Netflix
     #   redirect_to auth_url
     # end
     def acquire_request_token(callback_url, &blk)
-      # assert that we can do this here...
       
       # populate oauth token
       # return token, secret
@@ -89,10 +88,7 @@ module Netflix
     def self.consumer_secret
       @consumer_secret
     end
-    
-
-
-      
+        
     # attr_accessor :access_token, :access_token_secret, :user_id
     # 
     # def initialize(access_token, access_token_secret, user_id)
