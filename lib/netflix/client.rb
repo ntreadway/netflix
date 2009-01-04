@@ -9,7 +9,7 @@ module Netflix
   }.freeze
     
   # for bloed ups.  
-  class NetflixClientError < StandardError; end  
+  class ClientError < StandardError; end  
     
   # Client class responsible for setting up api calls.
   class AssHat
@@ -71,7 +71,7 @@ module Netflix
        
   end
   
-  class Client
+  class Client  
     
     def self.consumer_token=(consumer_token)
       @consumer_token = consumer_token
@@ -88,7 +88,42 @@ module Netflix
     def self.consumer_secret
       @consumer_secret
     end
-        
+    
+    def self.options
+      {
+        :scheme            => :query_string,
+        :http_method       => :post,
+        :signature_method  => "HMAC-SHA1",
+        :site              => "http://api.netflix.com",
+        :request_token_url => Netflix::OAUTH_ENDPOINTS[:request],
+        :access_token_url  => Netflix::OAUTH_ENDPOINTS[:access],
+        :authorize_url     => Netflix::OAUTH_ENDPOINTS[:authorize]
+      }
+    end
+
+    def consumer
+      @consumer ||= begin
+        token  = Netflix::Client.consumer_token
+        secret = Netflix::Client.consumer_secret
+
+        raise(ClientError, 'Consumer token and secret are required') if (token.nil? || secret.nil?)
+        OAuth::Consumer.new(token, secret, self.class.options)
+      end
+    end
+    
+    def request_token
+      @request_token ||= self.consumer.get_request_token
+    end
+    
+    def access_token
+      @access_token ||= self.request_token.get_access_token
+    end
+    
+    def get
+      self.access_token
+    end
+    
+    
     # attr_accessor :access_token, :access_token_secret, :user_id
     # 
     # def initialize(access_token, access_token_secret, user_id)
