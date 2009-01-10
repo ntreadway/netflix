@@ -5,3 +5,4 @@ require 'oauth/consumer'
 
 require 'netflix/user'
 require 'netflix/client'
+require 'netflix/configuration'

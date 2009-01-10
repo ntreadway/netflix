@@ -37,7 +37,7 @@ module Netflix
       # do stuff
       
       # give this to the client so that they can save it and stuff
-      yield request_token, request_token_secret, build_authorize_url(callback_url)
+      blk.call request_token, request_token_secret, build_authorize_url(callback_url)
     end
    
     # assuming we have stored these somewhere
@@ -48,7 +48,7 @@ module Netflix
     #   # do class_eval so that we can just call go(:get, "/queue")
     # end
     def exchange_request_token_for_access_token(request_token, request_token_secret, &blk)      
-      yield access_token, access_token_secret, user_id
+       blk.call access_token, access_token_secret, user_id
       # use the request token here to get an access token
       # return access token and user id to save.
       # return token, secret
@@ -62,7 +62,7 @@ module Netflix
       #pass infos to the client
       # set instance vars that the oauth client uses.
       # evaluate this block
-      yield AccessTokenWrapper.new(access_token, access_token_secret, user_id)
+      blk.call AccessTokenWrapper.new(access_token, access_token_secret, user_id)
     end
     
     def build_authorize_url(callback_url)
@@ -90,7 +90,7 @@ module Netflix
     end
     
     def self.options
-      {
+    {
         :scheme            => :query_string,
         :http_method       => :post,
         :signature_method  => "HMAC-SHA1",
@@ -98,7 +98,7 @@ module Netflix
         :request_token_url => Netflix::OAUTH_ENDPOINTS[:request],
         :access_token_url  => Netflix::OAUTH_ENDPOINTS[:access],
         :authorize_url     => Netflix::OAUTH_ENDPOINTS[:authorize]
-      }
+    }
     end
 
     def consumer
