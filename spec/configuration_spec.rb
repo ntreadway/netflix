@@ -25,7 +25,7 @@ module Netflix
 
     it "should yield the class from the initializer; maintaining scope" do
       Netflix::Configuration.application_name.should == "failweb"
-      Netflix::Configuration.new do |c|
+      Netflix::Configuration.run do |c|
         c.application_name = "app"
         c.application_name.should == "app"
       end

@@ -47,7 +47,7 @@ module Netflix
     describe "with a consumer token and consumer secret" do
       
       before do
-        @token = 'toke'
+        @token = 'token'
         @secret = 'secret'
         
         Client.consumer_token  = @token
@@ -68,9 +68,11 @@ module Netflix
       end
 
       it "should memoize the consumer object" do
-        OAuth::Consumer.expects(:new).with(@token, @secret, kind_of(Hash)).once.returns(stub())
+        consumer = stub()
+        
+        OAuth::Consumer.expects(:new).with(@token, @secret, kind_of(Hash)).once.returns(consumer)
 
-        2.times { @client.consumer }
+        2.times { @client.consumer.should === consumer }
       end
       
       it "should be able to generate a request token" do
@@ -86,7 +88,7 @@ module Netflix
         consumer_mock = mock() {|m| m.expects(:get_request_token).with().once.returns(request_token) }
         @client.expects(:consumer).with().returns(consumer_mock)
         
-        2.times { @client.request_token }
+        2.times { @client.request_token === request_token }
       end
 
       it "should be able to create an access token" do
@@ -100,7 +102,7 @@ module Netflix
         access_token = stub()
         
         @client.expects(:request_token).with().returns(stub(:get_access_token => access_token))
-        2.times { @client.access_token }
+        2.times { @client.access_token === access_token }
       end
 
       it "should create an access_token before issuing get request" do
