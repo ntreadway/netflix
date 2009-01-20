@@ -8,7 +8,7 @@ module Netflix
     before do
       Netflix::Configuration.application_name = "failweb"
       Netflix::Configuration.consumer_token = "token"
-      Netflix::Configuration.consumer_secret = "secret"
+      Netflix::Configuration.consumer_secret = "secret"  
     end
     
     it "should allow the client to get the :application name" do
@@ -22,14 +22,9 @@ module Netflix
     it "should allow the client to get the :consumer_secret" do
       Netflix::Configuration.consumer_secret.should == "secret"
     end
-
-    it "should yield the class from the initializer; maintaining scope" do
-      Netflix::Configuration.application_name.should == "failweb"
-      Netflix::Configuration.run do |c|
-        c.application_name = "app"
-        c.application_name.should == "app"
-      end
-      Netflix::Configuration.application_name.should == "app"
+    
+    it "should not allow the api_options to be changed" do
+      lambda { Netflix::Configuration.api_options[:scheme] = :query_string }.should raise_error(TypeError)
     end
    
   end

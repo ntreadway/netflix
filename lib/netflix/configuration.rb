@@ -1,24 +1,33 @@
 module Netflix
   
-
   # Config structure that represents the information that is needed
   # For a client to connect to netflix via OAuth
   class Configuration
       
     class << self
+
+      @@application_name = nil
+
+      @@consumer_token = nil
+
+      @@consumer_secret = nil
+     
+      @@api_options = {
+        :request_token_url => "http://api.netflix.com/oauth/request_token",
+        :access_token_url  => "https://api-user.netflix.com/oauth/login",
+        :authorize_url     => "http://api.netflix.com/oauth/access_token",
+        :scheme            => :body,
+        :http_method       => :post,
+        :signature_method  => "HMAC-SHA1",
+        :site              => "http://api.netflix.com"
+      }.freeze
       
-      # if a block is passed here, return the class so we can set the
-      # values. Really just a nice way to represent the setting in block.
-      def run
-        yield self if block_given?
-      end
- 
       def application_name=(application_name)
         @@application_name = application_name 
       end
     
       def application_name
-        @@application_name ||= ""
+        @@application_name
       end
   
       def consumer_token=(consumer_token)
@@ -26,7 +35,7 @@ module Netflix
       end
     
       def consumer_token
-        @@consumer_token ||= ""
+        @@consumer_token
       end
     
       def consumer_secret=(consumer_secret)
@@ -34,7 +43,11 @@ module Netflix
       end
     
       def consumer_secret
-        @@consumer_secret ||= ""
+        @@consumer_secret
+      end
+
+      def api_options
+        @@api_options 
       end
       
     end
