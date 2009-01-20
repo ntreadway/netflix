@@ -21,7 +21,11 @@ module Netflix
     def initiate_authorization(callback_url, &blk)
       consumer = build_consumer
       request_token = consumer.get_request_token
-      blk.call request_token.token, request_token.secret, prepare_authorize_url(callback_url)
+      callback_url = request_token.authorize_url({
+       :oauth_consumer_key => consumer.token,
+       :application_name   => Netflix::Configuration.application_name,
+       :oauth_callback     => callback_url                                                                               });
+      blk.call request_token.token, request_token.secret, callback_url
     end
    
     # assuming we have stored these somewhere
@@ -30,40 +34,48 @@ module Netflix
     #   config.get "/queue"
     # end
     def verify_account(request_token, request_token_secret, &blk)
-      # make the access token call. make the secondary call to
-      # /user/current to retreive the user_id
-      # return the block with the access_token, access_token_secret
-      # and user_id so that the client can save everything
-      @access_token = OAuth::AccessToken.new(build_consumer,
+      self.access_token = OAuth::RequestToken.new(build_consumer,
         request_token,
-        request_token_secret)
+        request_token_secret).get_access_token
       current_user = get "/users/current"
-      user_id = current_user.search(:user/id)
+      @user_id = current_user.search(:user/id)
       # need to make api call to /users/current to get user_id
       blk.call(self, @access_token.token, @access_token.secret, user_id)
     end
    
     def get(url, *args)
       access_token_guard! do
-        @access_token.get url, args
+        self.access_token.get url, args
       end  
     end
 
     def post(url, *args)
       access_token_guard! do
-        @access_token.post url, args      
+        self.access_token.post url, args      
       end
     end
 
     def delete(url, *args)
       access_token_guard! do
-        @access_token.delete url, args
+        self.access_token.delete url, args
       end
     end
     
     private
+    
+    def access_token
+      @access_token ||= OAuth::AccessToken.new(build_consumer,
+        @access_token,
+        @access_token_secret)
+    end
 
+    def access_token=(at)
+      @access_token = at
+    end
+      
     def prepare_authorize_url(callback_url)
+      
+
       callback_url
     end
     
