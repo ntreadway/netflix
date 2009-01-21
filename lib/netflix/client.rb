@@ -24,7 +24,7 @@ module Netflix
       callback_url = request_token.authorize_url({
        :oauth_consumer_key => consumer.token,
        :application_name   => Netflix::Configuration.application_name,
-       :oauth_callback     => callback_url                                                                               });
+       :oauth_callback     => callback_url                                            });
       blk.call request_token.token, request_token.secret, callback_url
     end
    
@@ -72,13 +72,7 @@ module Netflix
     def access_token=(at)
       @access_token = at
     end
-      
-    def prepare_authorize_url(callback_url)
-      
-
-      callback_url
-    end
-    
+     
     def build_consumer
       consumer_token = Netflix::Configuration.consumer_token
       consumer_secret = Netflix::Configuration.consumer_secret
@@ -86,8 +80,7 @@ module Netflix
       OAuth::Consumer.new(consumer_token, consumer_secret, options)
     end
     
-    # assert that the client has an access token before making api
-    #calls.
+    # assert that the client has an access token before making api calls.
     def access_token_guard!(&blk)
       raise ClientError.new("access_token is required.") if @access_token.nil?
       raise ClientError.new("access_token_secret is required.") if @access_token_secret.nil?
