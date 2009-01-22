@@ -14,15 +14,14 @@ describe "Client an instance" do
       
     it "should raise an error if no access token is passed and the api is accessed" do
       Netflix::Client.new do |c|
-        lambda {c.get "/queue"}.should raise_error(Netflix::ClientError)
+        lambda { c.get "/queue" }.should raise_error(Netflix::ClientError)
       end
     end
       
     it "should allow the client to initiate the authorization process" do
       # need to mock the consumer test here.
       Netflix::Client.new do |c|
-        lambda {c.initiate_authorization("cnn.com") {}}.should_not raise_error(
-                                                        Netflix::ClientError)
+        lambda { c.initiate_authorization("cnn.com") {} }.should_not raise_error
       end
     end
   end

@@ -2,7 +2,7 @@ module Netflix
     
   # wrap exceptions as our own.
   class ClientError < StandardError; end  
-    
+
   # Client class responsible for setting up api calls.
   class Client
 
@@ -22,9 +22,9 @@ module Netflix
       consumer = build_consumer
       request_token = consumer.get_request_token
       callback_url = request_token.authorize_url({
-       :oauth_consumer_key => consumer.token,
+       :oauth_consumer_key => consumer.key,
        :application_name   => Netflix::Configuration.application_name,
-       :oauth_callback     => callback_url                                            });
+       :oauth_callback     => callback_url});
       blk.call request_token.token, request_token.secret, callback_url
     end
    
