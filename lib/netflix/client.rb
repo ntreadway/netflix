@@ -16,7 +16,7 @@ module Netflix
       # TODO: try to eval this block on Netflix::Configuration
       # so we only have to reference the setters by name
       def configure(&blk)
-        blk.call Netflix::Configuration if block_given?
+        blk.call(Netflix::Configuration) if block_given?
         new
       end
     end
@@ -29,7 +29,7 @@ module Netflix
        :oauth_consumer_key => consumer.key,
        :application_name   => Netflix::Configuration.application_name,
        :oauth_callback     => callback_url);
-      blk.call request_token.token, request_token.secret, callback_url
+      blk.call(request_token.token, request_token.secret, callback_url)
       self
     end
    
@@ -57,8 +57,8 @@ module Netflix
     # * Just proved that we are who we are in netflix
     # * Retrieved the access token info form a datastore
     def api(access_token, access_token_secret, &blk)
-      access_token = build_access_token(access_token, access_token_secret)
-      instance_eval(blk) if block_given?
+      self.access_token = build_access_token(access_token, access_token_secret)
+      instance_eval(&blk) if block_given?
       self
     end
 
@@ -87,7 +87,7 @@ module Netflix
     attr_accessor :access_token
     
     def build_access_token(token, secret)
-      self.access_token ||= OAuth::AccessToken.new(
+      @access_token ||= OAuth::AccessToken.new(
         consumer,
         token,
         secret)

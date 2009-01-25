@@ -2,7 +2,7 @@
 
 module OAuth
   
-  class RequestToken
+  class RequestToken < ConsumerToken
 
     def authorize_url(*additional_params)
       additional_params = Hash[*additional_params]
