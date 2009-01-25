@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 require "open-uri"
+require "oauth"
+require "oauth/patches/token"
 
 module Netflix
     
@@ -24,32 +26,34 @@ module Netflix
     def initialize; end    
 
     def begin_verification(callback_url, &blk)
-      request_token = consumer.get_request_token
+      request_token = Netflix::Configuration.build_consumer.get_request_token
       callback_url = request_token.authorize_url(
-       :oauth_consumer_key => consumer.key,
+       :oauth_consumer_key => Netflix::Configuration.build_consumer.key,
        :application_name   => Netflix::Configuration.application_name,
        :oauth_callback     => callback_url);
       blk.call(request_token.token, request_token.secret, callback_url)
-      self
     end
    
     # assuming we have stored these somewhere temporarily
     # (request tokens/secrets are transient and cannot be reused. put
     # it in the session or some other store. drop them once you hav
     # exchanged it for an access token)
-    # client.finalize_verification(rt, rs) do |token, secret, user_id|
-    #   config.get "/queue"
+    # client.finalize_verification(rt, rs) do |api|
+    #   api.get "/queue"
+    #   access_token_key = api.access_token_key
+    #   access_token_secret = api.access_token_secret
+    #   user_id = api.user_id
     # end
     def finalize_verification(request_token, request_token_secret, &blk)
-      self.access_token = OAuth::RequestToken.new(
-        consumer,
+      self.api_request = OAuth::RequestToken.new(
+        Netflix::Configuration.build_consumer,
         request_token,
         request_token_secret).get_access_token
-      current_user = get "/users/current"
+      current_user = self.api_request.get "/users/current"
       user_href = current_user.at("/resource/link")["href"]
-
-      blk.call(access_token.token, access_token.secret, user_id)
-      self
+      user_id = 0
+      blk.call(self.api_request, user_id) if block_given?
+      self.api_request
     end
 
     # At this point we can try to make api calls.
@@ -57,55 +61,20 @@ module Netflix
     # * Just proved that we are who we are in netflix
     # * Retrieved the access token info form a datastore
     def api(access_token, access_token_secret, &blk)
-      self.access_token = build_access_token(access_token, access_token_secret)
-      instance_eval(&blk) if block_given?
-      self
-    end
-
-    # TODO: always force gzip in the following
-    # calls. {"Accept-Encoding" => "compress"}
-    def get(url, *args)
-      access_token_guard! do
-        self.access_token.get url, args
-      end  
-    end
-
-    def post(url, *args)
-      access_token_guard! do
-        self.access_token.post url, args      
-      end
-    end
-
-    def delete(url, *args)
-      access_token_guard! do
-        self.access_token.delete url, args
-      end
+      self.api_request = build_api_request(access_token, access_token_secret)
+      blk.call(self.api_request) if block_given?
+      self.api_request
     end
     
-    private
+    protected
 
-    attr_accessor :access_token
+    attr_accessor :api_request
     
-    def build_access_token(token, secret)
-      @access_token ||= OAuth::AccessToken.new(
-        consumer,
-        token,
-        secret)
-    end
-     
-    def consumer
-      @consumer ||= OAuth::Consumer.new(
-         Netflix::Configuration.consumer_token,
-         Netflix::Configuration.consumer_secret,
-         Netflix::Configuration.api_options)
-    end
-    
-    # assert that the client has an access token before making api calls.
-    def access_token_guard!(&blk)
-      if access_token.nil?
-        raise ClientError.new("An OAuth access token is required to access the api.")
+    def build_api_request(token, secret)
+      if token.nil? or token.empty? or secret.nil? or secret.empty?
+        raise Netflix::ClientError.new
       end
-      blk.call
+      @api_request ||= Netflix::ApiRequest.new(token, secret)
     end
     
   end

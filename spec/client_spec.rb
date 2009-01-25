@@ -36,19 +36,7 @@ describe Netflix::Client do
   it "should respond to :api" do
     @netflix.should respond_to(:api)
   end
-  
-  it "should respond to :get" do
-    @netflix.should respond_to(:get)
-  end
-
-  it "should respond to :post" do
-    @netflix.should respond_to(:post)
-  end
-
-  it "should respond to :delete" do
-    @netflix.should respond_to(:delete)
-  end
-  
+    
   context "when being created without a persisted access token (oauth handshake)" do
     
     before(:each) do
@@ -56,7 +44,7 @@ describe Netflix::Client do
     end
 
     it "should raise an error if no access token is passed and the api is accessed" do
-      lambda { @netflix.get "/queue" }.should raise_error(Netflix::ClientError)
+      lambda { @netflix.api(nil, nil).get "/queue" }.should raise_error(Netflix::ClientError)
     end
     
     # FIXME: mock oauth objects
@@ -80,7 +68,7 @@ describe Netflix::Client do
 
     # FIXME: mock oauth objects
     it "should create the object and yield a block if passed" do
-      lambda{ @netflix.api("", "").get("/users/current")}.should raise_error
+      lambda{ @netflix.api(nil, nil).get("/users/current")}.should raise_error
     end
       
   end

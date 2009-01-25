@@ -23,12 +23,12 @@ module Netflix
       Netflix::Configuration.consumer_secret.should == "secret"
     end
     
-    it "should not allow the api_options to be changed" do
-      lambda { Netflix::Configuration.api_options[:scheme] = :query_string }.should raise_error(TypeError)
-    end
-    
     it "should return the api version that it is using" do
       Netflix::Configuration.api_version.should == "1.0"
+    end
+
+    it "should return a new OAuth::Consumer object everytime #build_consumer is called" do
+      Netflix::Configuration.build_consumer.should_not === Netflix::Configuration.build_consumer
     end
     
   end

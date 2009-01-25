@@ -4,6 +4,7 @@ require "hpricot"
 require "oauth/consumer"
 require "oauth/token"
 
+require "netflix/api_request"
 require "netflix/user"
 require "netflix/client"
 require "netflix/configuration"

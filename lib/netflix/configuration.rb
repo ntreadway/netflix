@@ -48,12 +48,12 @@ module Netflix
         @@consumer_secret
       end
 
-      def api_options
-        @@api_options 
-      end
-
       def api_version
         @@api_version
+      end
+      
+      def build_consumer
+        OAuth::Consumer.new(@@consumer_token, @@consumer_secret, @@api_options)
       end
       
     end
