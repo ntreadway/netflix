@@ -6,6 +6,8 @@ module Netflix
       
     class << self
 
+      @@api_version = "1.0".freeze
+      
       @@application_name = nil
 
       @@consumer_token = nil
@@ -48,6 +50,10 @@ module Netflix
 
       def api_options
         @@api_options 
+      end
+
+      def api_version
+        @@api_version
       end
       
     end

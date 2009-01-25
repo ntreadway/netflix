@@ -26,7 +26,11 @@ module Netflix
     it "should not allow the api_options to be changed" do
       lambda { Netflix::Configuration.api_options[:scheme] = :query_string }.should raise_error(TypeError)
     end
-   
+    
+    it "should return the api version that it is using" do
+      Netflix::Configuration.api_version.should == "1.0"
+    end
+    
   end
 
 end
