@@ -12,8 +12,8 @@ module Netflix
     attr_reader :access_token_key, :access_token_secret
     
     def initialize(access_token_instance)
-      @access_token_key = access_token.key
-      @access_token_secret = access_token.secret
+      @access_token_key = access_token_instance.key
+      @access_token_secret = access_token_instance.secret
       @access_token = access_token_instance                                 
     end
 
