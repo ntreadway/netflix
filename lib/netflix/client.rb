@@ -45,13 +45,13 @@ module Netflix
     #   user_id = api.user_id
     # end
     def finalize_verification(request_token, request_token_secret, &blk)
-      self.api_request = OAuth::RequestToken.new(
-        Netflix::Configuration.build_consumer,
-        request_token,
-        request_token_secret).get_access_token
-      current_user = self.api_request.get "/users/current"
+      access_token = build_access_token_from_request_token(request_token, request_token_secret)
+      self.api_request = build_api_request(access_token.token, access_token.secret)
+      # TODO: move this to the api_request class so getting the user
+      # can be easily repeatable.
+      current_user = self.api_request.get("/users/current")
       user_href = current_user.at("/resource/link")["href"]
-      user_id = 0
+      user_id = self.api_request.get(user_href).at("/user/user_id")
       blk.call(self.api_request, user_id) if block_given?
       self.api_request
     end
@@ -74,7 +74,20 @@ module Netflix
       if token.nil? or token.empty? or secret.nil? or secret.empty?
         raise Netflix::ClientError.new
       end
-      @api_request ||= Netflix::ApiRequest.new(token, secret)
+      @api_request ||= begin
+        access_token = OAuth::AccessToken.new(                 
+          Netflix::Configuration.consumer,
+          token,                                    
+          secret)                                    
+        Netflix::ApiRequest.new(access_token)
+      end
+    end
+
+    def build_access_token_from_request_token(token, secret)
+      OAuth::RequestToken.new(
+        Netflix::Configuration.build_consumer,
+        token,
+        secret).get_access_token
     end
     
   end

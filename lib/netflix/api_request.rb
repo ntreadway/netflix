@@ -11,13 +11,10 @@ module Netflix
     
     attr_reader :access_token_key, :access_token_secret
     
-    def initialize(access_token_key, access_token_secret)
-      @access_token_key = access_token_key
-      @access_token_secret = access_token_secret
-      self.access_token = OAuth::AccessToken.new(
-          Netflix::Configuration.build_consumer,
-          access_token_key,
-          access_token_secret)                                             
+    def initialize(access_token_instance)
+      @access_token_key = access_token.key
+      @access_token_secret = access_token.secret
+      @access_token = access_token_instance                                 
     end
     
     def get(uri, *args)
