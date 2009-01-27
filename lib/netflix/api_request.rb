@@ -16,6 +16,10 @@ module Netflix
       @access_token_secret = access_token.secret
       @access_token = access_token_instance                                 
     end
+
+    # do a get to the /users/current endpoint and parse the user_id
+    def user_id
+    end
     
     def get(uri, *args)
       access_token_guard! do
