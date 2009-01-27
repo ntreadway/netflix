@@ -76,7 +76,7 @@ module Netflix
       end
       @api_request ||= begin
         access_token = OAuth::AccessToken.new(                 
-          Netflix::Configuration.consumer,
+          Netflix::Configuration.build_consumer,
           token,                                    
           secret)                                    
         Netflix::ApiRequest.new(access_token)
