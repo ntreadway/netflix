@@ -12,7 +12,7 @@ describe OAuth::RequestToken, "an instance" do
   end
  
   it "should allow the client to pass splat args to #authorize_url without exception" do    
-    lambda {@request_token.authorize_url(:application_name => "kinda_win")}.should_not raise_error
+    lambda { @request_token.authorize_url(:application_name => "kinda_win") }.should_not raise_error
   end
 
   it "should build an auth url with the key value pairs passed to it and return it" do

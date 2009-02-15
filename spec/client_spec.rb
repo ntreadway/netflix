@@ -74,4 +74,3 @@ describe Netflix::Client do
   end
     
 end
-
