@@ -16,7 +16,8 @@ spec = Gem::Specification.new do |s|
   s.email            = "rob.ares@gmail.com"
   s.homepage         = "http://www.robares.com"
   s.files            = %w(README.markdown Rakefile) + Dir.glob("{lib,test}/**/*")
-  s.add_dependency("rares-oauth", ">=0.2.7")
+  s.add_dependency("oauth", ">=0.3.1")
+  s.add_dependency("hpricot", ">=0.6")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
