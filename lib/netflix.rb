@@ -5,10 +5,9 @@ require "oauth/consumer"
 require "oauth/token"
 
 require "netflix/api_request"
-require "netflix/user"
+require "netflix/api_response"
 require "netflix/client"
 require "netflix/configuration"
-require "netflix/response"
 
 # patch the request token class to play better with netflix
 require "oauth/patches/token"

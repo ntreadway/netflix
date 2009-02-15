@@ -1,10 +1,10 @@
 require 'rubygems'
 require 'rake/gempackagetask'
-require 'spec/rake/spectask'
-
+require 'rake'
+require 'rake/testtask'
 require 'lib/netflix/version'
 
-task :default => :spec
+task :default => :test
 
 spec = Gem::Specification.new do |s|
   s.name             = "netflix"
@@ -24,10 +24,11 @@ Rake::GemPackageTask.new(spec) do |pkg|
   pkg.gem_spec = spec
 end
 
-Spec::Rake::SpecTask.new(:spec) do |s|
-  s.spec_files = FileList[File.dirname(__FILE__) + '/spec/*_spec.rb']
-  s.verbose = true
-  s.spec_opts = ["--color", "--format specdoc", "--diff"]
+Rake::TestTask.new(:test) do |t|
+  t.libs << "test"
+  t.test_files = FileList["test/*test.rb"]
+  t.verbose = true
+  t.options = "-v"
 end
 
 desc 'Generate the gemspec to serve this Gem from Github'

@@ -7,18 +7,15 @@ module Netflix
   class AccessTokenMissingError < StandardError; end
   
   class ApiRequest
-    DEFAULT_REQUEST_PARAMS = {"Accept-Encoding" => "compress"}
-    
-    attr_reader :access_token_key, :access_token_secret
-    
+    DEFAULT_REQUEST_PARAMS = {"Accept-Encoding" => "compress"}.freeze
+        
     def initialize(access_token_instance)
-      @access_token_key = access_token_instance.key
-      @access_token_secret = access_token_instance.secret
       @access_token = access_token_instance                                 
     end
 
     # do a get to the /users/current endpoint and parse the user_id
     def user_id
+      get("/users/current")
     end
     
     def get(uri, *args)
@@ -44,8 +41,7 @@ module Netflix
     attr_accessor :access_token
     
     def build_params(*params)
-      return DEFAULT_REQUEST_PARAMS
-      DEFAULT_REQUEST_PARAMS.merge(Hash[*params])
+      DEFAULT_REQUEST_PARAMS.dup.merge(Hash[*params]).flatten
     end
     
     # assert that the client has an access_token before api calls.
